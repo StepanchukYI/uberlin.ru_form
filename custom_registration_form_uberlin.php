@@ -865,7 +865,7 @@ h5{	text-transform: uppercase;}
 	';
 
 	$upload_dir = wp_upload_dir();
-	$name       = date('Y-m-d_h:i:s') . generateRandomString() . '.pdf';
+	$name       = date('Y-m-d_h:i:s') . '-' . generateRandomString() . '.pdf';
 
 	$path = $upload_dir['basedir'] . '/user_pdf/' . $name;
 
