@@ -842,7 +842,7 @@ h5{	text-transform: uppercase;}
 		<tr>
 			<td>Индивидуальный предприниматель <br>
 Макухин Арсений Александрович</td>
-			<td><img src="' . WP_CONTENT_DIR . '/uploads/user_pdf/uberlin.jpg"></td>
+			<td><img style="max-width: 200px;" src="' . WP_CONTENT_DIR . '/uploads/user_pdf/uberlin.jpg"></td>
 		</tr>
 	</table>
 	';
