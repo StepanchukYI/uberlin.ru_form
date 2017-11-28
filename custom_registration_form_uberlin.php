@@ -48,7 +48,15 @@ function custom_registration_submit_ajax()
 			$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment );
 
 
-		$response = [ 'success' => $response ];
+
+		$response = [ 'success' => 'Спасибо, Ваши реквизиты получены, копия ваших реквизитов и договор отправлены вам на почту, это подтверждает, то что мы уже получили ваши реквизиты. 
+
+Для действующих водителей:
+Пожалуйста, отпишитесь нам после заполнения реквизитов что передали реквизиты по вотсап/вайбер/смс на номер 8-964-559-55-51
+
+Для новых водителей:
+Надеемся, что вы четко следуете нашей инструкции шаг за шагом, следующий Шаг № 3 – Вам нужно пройти видео обучение и установить самостоятельно приложение Uber Driver. 
+Ссылка на видео и инструкции https://uberlin.ru/edu/' ];
 
 	} else
 	{
@@ -140,14 +148,8 @@ function castom_reg_form_my_custom_js_footer()
                             console.log('2 error');
                             jQuery('#modal-text').html('');
                             jQuery('#myModal').css('display', 'block');
-                            if (response.error.name) {
+                            if (response.error.fiouser) {
                                 jQuery('#modal-text').append('<p>' + response.error.name + '<p>');
-                            }
-                            if (response.error.lname) {
-                                jQuery('#modal-text').append('<p>' + response.error.lname + '<p>');
-                            }
-                            if (response.error.fname) {
-                                jQuery('#modal-text').append('<p>' + response.error.fname + '<p>');
                             }
                             if (response.error.email) {
                                 jQuery('#modal-text').append('<p>' + response.error.email + '<p>');
