@@ -841,7 +841,7 @@ h5{	text-transform: uppercase;}
 	<table>
 		<tr>
 			<td>Индивидуальный предприниматель <br>
-Калинин Вадим Викторович</td>
+Макухин Арсений Александрович</td>
 			<td><img src="' . WP_CONTENT_DIR . '/uploads/user_pdf/uberlin.jpg"></td>
 		</tr>
 	</table>
