@@ -9,7 +9,6 @@
  */
 
 include( 'MPDF57/mpdf.php' );
-include('Mail/mime.php');
 ///////////////////////////// Submit Registration  /////////////////////////////////////////////
 add_action( 'wp_ajax_custom_registration_submit_ajax', 'custom_registration_submit_ajax' );
 add_action( 'wp_ajax_nopriv_custom_registration_submit_ajax', 'custom_registration_submit_ajax' );
@@ -49,18 +48,22 @@ function custom_registration_submit_ajax()
 			$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment );
 
 
-        if($response['success']){
-	        $response = [ 'success' => 'Спасибо, Ваши реквизиты получены, копия ваших реквизитов и договор отправлены вам на почту, это подтверждает, то что мы уже получили ваши реквизиты. 
+		if ( $response['success'] )
+		{
+			$response = [
+				'success' => 'Спасибо, Ваши реквизиты получены, копия ваших реквизитов и договор отправлены вам на почту, это подтверждает, то что мы уже получили ваши реквизиты. 
 
 Для действующих водителей:
 Пожалуйста, отпишитесь нам после заполнения реквизитов что передали реквизиты по вотсап/вайбер/смс на номер 8-964-559-55-51
 
 Для новых водителей:
 Надеемся, что вы четко следуете нашей инструкции шаг за шагом, следующий Шаг № 3 – Вам нужно пройти видео обучение и установить самостоятельно приложение Uber Driver. 
-Ссылка на видео и инструкции https://uberlin.ru/edu/' ];
-        }else{
-	        $response = ['complete' => 'Ошибка завершения регистрации!'];
-        }
+Ссылка на видео и инструкции https://uberlin.ru/edu/'
+			];
+		} else
+		{
+			$response = [ 'complete' => 'Ошибка завершения регистрации!' ];
+		}
 
 
 	} else
@@ -724,7 +727,7 @@ function generateRandomString()
 	$characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$charactersLength = strlen( $characters );
 	$randomString     = '';
-	for ( $i = 0; $i < 30; $i ++ )
+	for ( $i = 0; $i < 10; $i ++ )
 	{
 		$randomString .= $characters[ rand( 0, $charactersLength - 1 ) ];
 	}
@@ -862,7 +865,7 @@ h5{	text-transform: uppercase;}
 	';
 
 	$upload_dir = wp_upload_dir();
-	$name       = generateRandomString() . '.pdf';
+	$name       = date('Y-m-d_h:i:s') . generateRandomString() . '.pdf';
 
 	$path = $upload_dir['basedir'] . '/user_pdf/' . $name;
 
@@ -872,33 +875,39 @@ h5{	text-transform: uppercase;}
 	$mpdf->charset_in = 'windows-1252';
 	$mpdf->Output( $path );
 
-	sleep( 5 );
+	$subj = 'Договор';
+	$text = 'Договор между с клиентом!';
 
-	$text = 'Text version of email';
-	$html = '<html><body>HTML version of email</body></html>';
-	$file = '/home/richard/example.php';
-	$crlf = "\r\n";
-	$hdrs = array(
-		'From'    => 'you@yourdomain.com',
-		'Subject' => 'Test mime message'
-	);
-
-	$mime = new Mail_mime($crlf);
-
-	$mime->setTXTBody($text);
-	$mime->setHTMLBody($html);
-	$mime->addAttachment($path, 'text/plain');
-
-	$body = $mime->get();
-	$hdrs = $mime->headers($hdrs);
-
-	$mail =& Mail::factory('mail');
-
-	$mail->send($email, $hdrs, $body);
-	$mail->send('dogovor@uberlin.ru', $hdrs, $body);
+	XMail( $email, $subj, $text, $path );
+	XMail( 'dogovor@uberlin.ru', $subj, $text, $path );
 
 
 	return [ 'success' => 'Успешно' ];
+}
+
+function XMail( $to, $subj, $text, $filename )
+{
+	$f    = fopen( $filename, "rb" );
+	$un   = strtoupper( uniqid( time() ) );
+	$head = "From: wordpress@uberlin.ru\n";
+	$head .= "To: $to\n";
+	$head .= "Subject: $subj\n";
+	$head .= "X-Mailer: PHPMail Tool\n";
+	$head .= "Reply-To: wordpress@uberlin.ru\n";
+	$head .= "Mime-Version: 1.0\n";
+	$head .= "Content-Type:multipart/mixed;";
+	$head .= "boundary=\"----------" . $un . "\"\n\n";
+	$zag  = "------------" . $un . "\nContent-Type:text/html;\n";
+	$zag  .= "Content-Transfer-Encoding: 8bit\n\n$text\n\n";
+	$zag  .= "------------" . $un . "\n";
+	$zag  .= "Content-Type: application/octet-stream;";
+	$zag  .= "name=\"" . basename( $filename ) . "\"\n";
+	$zag  .= "Content-Transfer-Encoding:base64\n";
+	$zag  .= "Content-Disposition:attachment;";
+	$zag  .= "filename=\"" . basename( $filename ) . "\"\n\n";
+	$zag  .= chunk_split( base64_encode( fread( $f, filesize( $filename ) ) ) ) . "\n";
+
+	return @mail( "$to", "$subj", $zag, $head );
 }
 
 // Register a new shortcode: [cr_custom_registration]
