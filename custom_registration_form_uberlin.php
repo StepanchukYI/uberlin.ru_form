@@ -48,8 +48,8 @@ function custom_registration_submit_ajax()
 			$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment );
 
 
-
-		$response = [ 'success' => 'Спасибо, Ваши реквизиты получены, копия ваших реквизитов и договор отправлены вам на почту, это подтверждает, то что мы уже получили ваши реквизиты. 
+        if($response['success']){
+	        $response = [ 'success' => 'Спасибо, Ваши реквизиты получены, копия ваших реквизитов и договор отправлены вам на почту, это подтверждает, то что мы уже получили ваши реквизиты. 
 
 Для действующих водителей:
 Пожалуйста, отпишитесь нам после заполнения реквизитов что передали реквизиты по вотсап/вайбер/смс на номер 8-964-559-55-51
@@ -57,6 +57,10 @@ function custom_registration_submit_ajax()
 Для новых водителей:
 Надеемся, что вы четко следуете нашей инструкции шаг за шагом, следующий Шаг № 3 – Вам нужно пройти видео обучение и установить самостоятельно приложение Uber Driver. 
 Ссылка на видео и инструкции https://uberlin.ru/edu/' ];
+        }else{
+	        $response = ['complete' => 'Ошибка завершения регистрации!'];
+        }
+
 
 	} else
 	{
@@ -198,6 +202,9 @@ function castom_reg_form_my_custom_js_footer()
                             }
                             if (response.error.poluchCode) {
                                 jQuery('#modal-text').append('<p>' + response.error.poluchCode + '<p>');
+                            }
+                            if (response.error.complete) {
+                                jQuery('#modal-text').append('<p>' + response.error.complete + '<p>');
                             }
                         }
                         if (response.success) {
