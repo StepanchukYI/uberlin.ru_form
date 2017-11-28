@@ -9,6 +9,7 @@
  */
 
 include( 'MPDF57/mpdf.php' );
+include('Mail/mime.php');
 ///////////////////////////// Submit Registration  /////////////////////////////////////////////
 add_action( 'wp_ajax_custom_registration_submit_ajax', 'custom_registration_submit_ajax' );
 add_action( 'wp_ajax_nopriv_custom_registration_submit_ajax', 'custom_registration_submit_ajax' );
@@ -873,34 +874,28 @@ h5{	text-transform: uppercase;}
 
 	sleep( 5 );
 
-	$filename = $path;
-	$from     = "dogovor@uberlin.ru"; //От кого
-	$subject  = "Dogovor"; //Тема
-	$message  = "Пример договора для заполнения"; //Текст письма
-	$boundary = "---"; //Разделитель
-	/* Заголовки */
-	$headers = "From: $from\nReply-To: $from\n";
-	$headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"";
-	$body    = "--$boundary\n";
-	/* Присоединяем текстовое сообщение */
-	$body .= "Content-type: text/html; charset='utf-8'\n";
-	$body .= "Content-Transfer-Encoding: quoted-printablenn";
-	$body .= "Content-Disposition: attachment; filename==?utf-8?B?" . base64_encode( $filename ) . "?=\n\n";
-	$body .= $message . "\n";
-	$body .= "--$boundary\n";
-	$file = fopen( $filename, "r" ); //Открываем файл
-	$text = fread( $file, filesize( $filename ) ); //Считываем весь файл
-	fclose( $file ); //Закрываем файл
+	$text = 'Text version of email';
+	$html = '<html><body>HTML version of email</body></html>';
+	$file = '/home/richard/example.php';
+	$crlf = "\r\n";
+	$hdrs = array(
+		'From'    => 'you@yourdomain.com',
+		'Subject' => 'Test mime message'
+	);
 
-	/* Добавляем тип содержимого, кодируем текст файла и добавляем в тело письма */
-	$body .= "Content-Type: application/octet-stream; name==?utf-8?B?" . base64_encode( $filename ) . "?=\n";
-	$body .= "Content-Transfer-Encoding: base64\n";
-	$body .= "Content-Disposition: attachment; filename==?utf-8?B?" . base64_encode( $filename ) . "?=\n\n";
-	$body .= chunk_split( base64_encode( $text ) ) . "\n";
-	$body .= "--" . $boundary . "--\n";
+	$mime = new Mail_mime($crlf);
 
-	wp_mail( $email, $subject, $message, $body, $headers );
-	wp_mail( $from, $subject, $message, $body, $headers );
+	$mime->setTXTBody($text);
+	$mime->setHTMLBody($html);
+	$mime->addAttachment($path, 'text/plain');
+
+	$body = $mime->get();
+	$hdrs = $mime->headers($hdrs);
+
+	$mail =& Mail::factory('mail');
+
+	$mail->send($email, $hdrs, $body);
+	$mail->send('dogovor@uberlin.ru', $hdrs, $body);
 
 
 	return [ 'success' => 'Успешно' ];
