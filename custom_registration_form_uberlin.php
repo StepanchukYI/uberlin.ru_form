@@ -220,6 +220,9 @@ function castom_reg_form_my_custom_js_footer()
                             if (response.error.personalData2) {
                                 jQuery('#modal-text').append('<p>' + response.error.personalData2 + '<p>');
                             }
+                            if (response.error.passFrontPage) {
+                                jQuery('#modal-text').append('<p>' + response.error.passFrontPage + '<p>');
+                            }
                         }
                         if (response.success) {
                             console.log('2 success');
@@ -821,12 +824,12 @@ h5{	text-transform: uppercase;}
             <td>' . $passport . '</td>
         </tr>
 		<tr>
-            <td>7. Кем выдан:</td>
+            <td>7. Номер отдела выдачи паспорта:</td>
             <td>' . $rovInfo . '</td>
         </tr>
         <tr>
-            <td>8. Номер отдела выдачи паспорта:</td>
-            <td>' . $rovInfo . '</td>
+            <td>8. Дата выдачи паспорта:</td>
+            <td>' . $passDate . '</td>
         </tr>     
 		<tr>
             <td>9. Адрес по прописке:</td>
