@@ -36,10 +36,12 @@ function custom_registration_submit_ajax()
 	$bankCard              = $_REQUEST['bankCard'];
 	$comment               = $_REQUEST['comment'];
 	$personalData          = $_REQUEST['personalData'];
+	$personalData1          = $_REQUEST['personalData1'];
+	$personalData2          = $_REQUEST['personalData2'];
 
 	$reg_error = registration_validation( $fiouser, $bdate, $bplace, $email, $phonenumber,
 		$city, $passport, $passDate, $rovInfo, $address,
-		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file );
+		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $personalData1, $personalData2, $personalData );
 
 	if ( count( $reg_error ) == 0 )
 	{
@@ -143,6 +145,8 @@ function castom_reg_form_my_custom_js_footer()
                 form_data.append("poluchCode", jQuery('#poluchCode').val());
                 form_data.append("comment", jQuery('#comment').val());
                 form_data.append("personalData", jQuery('#personalData').is(':checked'));
+                form_data.append("personalData1", jQuery('#personalData1').is(':checked'));
+                form_data.append("personalData2", jQuery('#personalData2').is(':checked'));
                 jQuery.ajax({
                     type: "post",
                     url: new_reg_ajax_url,
@@ -183,9 +187,6 @@ function castom_reg_form_my_custom_js_footer()
                             if (response.error.passport) {
                                 jQuery('#modal-text').append('<p>' + response.error.passport + '<p>');
                             }
-                            if (response.error.passport) {
-                                jQuery('#modal-text').append('<p>' + response.error.passport + '<p>');
-                            }
                             if (response.error.rovInfo) {
                                 jQuery('#modal-text').append('<p>' + response.error.rovInfo + '<p>');
                             }
@@ -210,11 +211,21 @@ function castom_reg_form_my_custom_js_footer()
                             if (response.error.complete) {
                                 jQuery('#modal-text').append('<p>' + response.error.complete + '<p>');
                             }
+                            if (response.error.personalData) {
+                                jQuery('#modal-text').append('<p>' + response.error.personalData + '<p>');
+                            }
+                            if (response.error.personalData1) {
+                                jQuery('#modal-text').append('<p>' + response.error.personalData1 + '<p>');
+                            }
+                            if (response.error.personalData2) {
+                                jQuery('#modal-text').append('<p>' + response.error.personalData2 + '<p>');
+                            }
                         }
                         if (response.success) {
                             console.log('2 success');
                             jQuery('#modal-text').text(response.success);
                             jQuery('#myModal').css('display', 'block');
+                            window.location.href = "https://uberlin.ru/rekok";
                         }
                     }
                 });
@@ -649,7 +660,7 @@ function check_card_number( $str )
 function registration_validation(
 	$fiouser, $bdate, $bplace, $email, $phonenumber,
 	$city, $passport, $passDate, $rovInfo, $address,
-	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file
+	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $personalData1, $personalData2, $personalData
 ) {
 
 	$reg_errors = [];
@@ -677,9 +688,17 @@ function registration_validation(
 	{
 		$reg_errors['passport'] = 'Ошибка ввода паспорта';
 	}
-	if ( strlen( $passDate ) < 2 || strlen( $passDate ) > 100 )
+	if ( $personalData == 'false' )
 	{
-		$reg_errors['passDate'] = 'Ошибка ввода даты выдачи паспорта';
+		$reg_errors['personalData'] = 'Подтвердите условия офреты';
+	}
+	if ( $personalData1 == 'false' )
+	{
+		$reg_errors['personalData'] = 'Подтвердите Пользовательского соглашения';
+	}
+	if ( $personalData2 == 'false' )
+	{
+		$reg_errors['personalData'] = 'Подтвердите действий сознательно';
 	}
 	if ( strlen( $rovInfo ) < 2 || strlen( $rovInfo ) > 100 )
 	{
