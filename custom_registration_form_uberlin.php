@@ -58,7 +58,7 @@ function custom_registration_submit_ajax()
 
 Для новых водителей:
 Надеемся, что вы четко следуете нашей инструкции шаг за шагом, следующий Шаг № 3 – Вам нужно пройти видео обучение и установить самостоятельно приложение Uber Driver. 
-Ссылка на видео и инструкции <a href="https://uberlin.ru/edu/">https://uberlin.ru/edu/</a>'
+Ссылка на видео и инструкции https://uberlin.ru/edu/'
 			];
 		} else
 		{
@@ -775,11 +775,11 @@ h5{	text-transform: uppercase;}
         <tr>
             <td>2. Адрес электронной почты:</td>
             <td>' . $email . '</td>
-        </tr>
-        <tr>
-            <td>3. Номер отдела выдачи паспорта:</td>
-            <td>' . $rovInfo . '</td>
-        </tr>          
+        </tr>	
+		<tr>
+            <td>3. Номер телефона:</td>
+            <td>' . $phonenumber . '</td>
+        </tr>                  
         <tr>
             <td>4. Дата рождения:</td>
             <td>' . $bdate . '</td>
@@ -796,30 +796,26 @@ h5{	text-transform: uppercase;}
             <td>7. Кем выдан:</td>
             <td>' . $rovInfo . '</td>
         </tr>
-		<tr>
-            <td>8. Когда выдан:</td>
-            <td>' . $passDate . '</td>
-        </tr>
+        <tr>
+            <td>8. Номер отдела выдачи паспорта:</td>
+            <td>' . $rovInfo . '</td>
+        </tr>     
 		<tr>
             <td>9. Адрес по прописке:</td>
             <td>' . $address . '</td>
         </tr>
 		<tr>
-            <td>8. БИК Банка:</td>
+            <td>10. БИК Банка:</td>
             <td>' . $bik . '</td>
         </tr>
 		<tr>
-            <td>10. Наименование банка:</td>
+            <td>11. Наименование банка:</td>
             <td>' . $bankName . '</td>
         </tr>
 		<tr>
-            <td>11. Счет получателя:</td>
+            <td>12. Счет получателя:</td>
             <td>' . $poluchCode . '</td>
-        </tr>		
-		<tr>
-            <td>12. Номер телефона:</td>
-            <td>' . $phonenumber . '</td>
-        </tr>            
+        </tr>	       
         <tr>
             <td>13. Корр. счет банка:</td>
             <td>' . $korrBank . '</td>
