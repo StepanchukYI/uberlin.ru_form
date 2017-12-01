@@ -99,7 +99,7 @@ function castom_reg_form_my_custom_js_footer()
             //jQuery("#korrBank").mask("301 00000000000000000");
             jQuery("#rovInfo").mask("000-000");
             jQuery("#passport").mask("00 00 000000");
-            jQuery("#bankCard").mask("0000 0000 0000 0000");
+            // jQuery("#bankCard").mask("0000 0000 0000 0000");
 
             jQuery('.close').click(function () {
                 jQuery('#myModal').css('display', 'none')
@@ -588,7 +588,7 @@ function registration_form( $local )
 
 	<div>
         <label class="" for="bankName">' . $local['bankName'] . '</label>
-        <input id="bankName" type="text" name="bankName" placeholder="' . $local['bankName'] . '" value=""/>
+        <input id="bankName" type="text" name="bankName" placeholder="' . $local['bankName'] . '" value="" maxlength="18"/>
     </div>
 	
 	<div>
