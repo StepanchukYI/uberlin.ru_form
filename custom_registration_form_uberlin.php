@@ -724,18 +724,27 @@ function registration_validation(
 	{
 		$reg_errors['poluchCode'] = 'Ошибка ввода кода получателя';
 	}
-	if ( ! check_card_number( $bankCard ) )
-	{
-		$reg_errors['bankCard'] = 'Ошибка ввода банковской карты';
-	}
 	if ( empty( $file['passFrontPage'] ) )
 	{
 		$reg_errors['passFrontPage'] = 'Ошибка файла с фото с паспорта';
+	}
+	if ( ! isset($phonenumber) )
+	{
+		$reg_errors['phonenumber'] = 'Ошибка ввода номера';
+	}
+	if ( ! isset($bankCard) )
+	{
+		$reg_errors['bankCard'] = 'Ошибка ввода банковской карты';
 	}
 // 	if ( ! preg_match( "/[0-9]$/i", $phonenumber ) || strlen( $phonenumber ) != 11 )
 // 	{
 // 		$reg_errors['phonenumber'] = 'Ошибка ввода номера';
 // 	}
+//	if ( ! check_card_number( $bankCard ) )
+//	{
+//		$reg_errors['bankCard'] = 'Ошибка ввода банковской карты';
+//	}
+
 
 	return $reg_errors;
 
