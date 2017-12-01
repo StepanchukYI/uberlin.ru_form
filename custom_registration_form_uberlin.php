@@ -795,7 +795,7 @@ td.lastrow {
 	border-right: 0.6mm solid #000000;
 }
 h5{	text-transform: uppercase;}
-</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ 5-63B от «'.date('d').'» '.date('F').' '.date('Y').' г.</h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
+</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ 5-63B от «'.date('Y.m.d').'» г.</h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
 </table>
 <div style="text-align: center;"><h5>Реквизиты Принципала:</h5></div>
     <table border="0" align="center">
@@ -904,7 +904,7 @@ function XMail( $to, $subj, $text, $filename )
 	$f    = fopen( $filename, "rb" );
 	$un   = strtoupper( uniqid( time() ) );
 	$head = "From: dogovor@uberlin.ru\n";
-	$head .= "To: $to\n";
+//	$head .= "To: $to\n";
 	$head .= "Subject: $subj\n";
 	$head .= "X-Mailer: PHPMail Tool\n";
 	$head .= "Reply-To: dogovor@uberlin.ru\n";
