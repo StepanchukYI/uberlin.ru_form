@@ -905,7 +905,7 @@ function XMail( $to, $subj, $text, $filename )
 	$un   = strtoupper( uniqid( time() ) );
 	$head = "From: dogovor@uberlin.ru\n";
 //	$head .= "To: $to\n";
-	$head .= "Subject: $subj\n";
+//	$head .= "Subject: $subj\n";
 	$head .= "X-Mailer: PHPMail Tool\n";
 	$head .= "Reply-To: dogovor@uberlin.ru\n";
 	$head .= "Mime-Version: 1.0\n";
