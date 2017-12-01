@@ -887,7 +887,7 @@ h5{	text-transform: uppercase;}
 	$mpdf->Output( $path );
 
 	$subj = 'Договор';
-	$text = 'Договор между с клиентом!';
+	$text = 'Здравствуйте, ваши реквизиты получены, присоединение к агентскому договору сформировано';
 
 	XMail( $email, $subj, $text, $path );
 	XMail( 'dogovor@uberlin.ru', $subj, $text, $path );
@@ -900,11 +900,11 @@ function XMail( $to, $subj, $text, $filename )
 {
 	$f    = fopen( $filename, "rb" );
 	$un   = strtoupper( uniqid( time() ) );
-	$head = "From: wordpress@uberlin.ru\n";
+	$head = "From: dogovor@uberlin.ru\n";
 	$head .= "To: $to\n";
 	$head .= "Subject: $subj\n";
 	$head .= "X-Mailer: PHPMail Tool\n";
-	$head .= "Reply-To: wordpress@uberlin.ru\n";
+	$head .= "Reply-To: dogovor@uberlin.ru\n";
 	$head .= "Mime-Version: 1.0\n";
 	$head .= "Content-Type:multipart/mixed;";
 	$head .= "boundary=\"----------" . $un . "\"\n\n";
