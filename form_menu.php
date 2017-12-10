@@ -93,8 +93,8 @@ class TT_Example_List_Table extends WP_List_Table
 	{
 		//Build row actions
 		$actions = array(
-			'edit'   => sprintf( '<a href="?page=%s&action=%s&movie=%s">Редактировать</a>', $_REQUEST['page'], 'edit', $item['id'] ),
-			'delete' => sprintf( '<a href="?page=%s&action=%s&movie=%s">Удалить</a>', $_REQUEST['page'], 'delete', $item['id'] ),
+			'edit'   => sprintf( '<a href="?page=%s&action=%s&user=%s">Редактировать</a>', $_REQUEST['page'], 'edit', $item['id'] ),
+			'delete' => sprintf( '<a href="?page=%s&action=%s&user=%s">Удалить</a>', $_REQUEST['page'], 'delete', $item['id'] ),
 		);
 
 		//Return the title contents
@@ -295,7 +295,7 @@ class TT_Example_List_Table extends WP_List_Table
 		 * use sort and pagination data to build a custom query instead, as you'll
 		 * be able to use your precisely-queried data immediately.
 		 */
-		$data = get_all_user_data();
+		$data = get_user_data();
 
 
 		/**
@@ -470,11 +470,20 @@ function my_plugin_options()
 	<?php
 }
 
-function get_all_user_data()
+function get_user_data()
 {
 	global $wpdb;
 	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
 	$users      = $wpdb->get_results( "SELECT id,fiouser,email,phonenumber,city,passport FROM {$table_name}", 'ARRAY_A' );
+
+	return $users;
+}
+
+function get_all_user_data()
+{
+	global $wpdb;
+	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
+	$users      = $wpdb->get_results( "SELECT * FROM {$table_name}", 'ARRAY_A' );
 
 	return $users;
 }

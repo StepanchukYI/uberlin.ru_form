@@ -778,6 +778,11 @@ function complete_registration(
 	setlocale( LC_TIME, "ru_RU.UTF-8" );
 //    $date = strftime("%d %B, %H:%M",strtotime($row['date']));
 
+	$lastid = insert_user_data(
+		$fiouser, $bdate, $bplace, $email, $phonenumber,
+		$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
+		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment
+	);
 	$html = '<style>
 body {font-family: sans-serif;
     font-size: 10pt;
@@ -799,7 +804,7 @@ td.lastrow {
 	border-right: 0.6mm solid #000000;
 }
 h5{	text-transform: uppercase;}
-</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ 5-63B от «' . date( 'Y.m.d' ) . '» г.</h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
+</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ '. $lastid .' от «' . date( 'Y.m.d' ) . '» г. </h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
 </table>
 <div style="text-align: center;"><h5>Реквизиты Принципала:</h5></div>
     <table border="0" align="center">
@@ -872,7 +877,7 @@ h5{	text-transform: uppercase;}
 			</td>
 		</tr>
 	</table>
-	<div>Индивидуальный код: (4420) _______________________ / ' . $fiouser . '/</div>
+	<div>Индивидуальный код: ('. $lastid .') _______________________ / ' . $fiouser . '/</div>
 	<table>
 		<tr>
 			<td>Индивидуальный предприниматель <br>
@@ -894,11 +899,7 @@ h5{	text-transform: uppercase;}
 
 	$mpdf->Output( $path );
 
-	var_dump( insert_user_data(
-		$fiouser, $bdate, $bplace, $email, $phonenumber,
-		$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment
-	) );
+
 
 	$subj = 'Договор';
 	$text = 'Здравствуйте, ваши реквизиты получены, присоединение к агентскому договору сформировано';
@@ -958,7 +959,7 @@ function insert_user_data(
 	$table_name = $wpdb->prefix . 'custom_registration_form_uberlin';
 	$wpdb->show_errors();
 
-	return $wpdb->insert( $table_name, array(
+	$wpdb->insert( $table_name, array(
 		'fiouser'     => $fiouser,
 		'bdate'       => $bdate,
 		'bplace'      => $bplace,
@@ -978,7 +979,7 @@ function insert_user_data(
 		'comment'     => $comment
 	) );
 
-	return;
+	return $wpdb->insert_id;
 
 }
 
