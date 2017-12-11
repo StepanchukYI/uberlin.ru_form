@@ -91,8 +91,8 @@ function castom_reg_form_my_custom_js_footer()
 	?>
     <script>
 
-        var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
-        // var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
+        // var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
+        var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
 
         jQuery(document).ready(function () {
 
@@ -127,6 +127,9 @@ function castom_reg_form_my_custom_js_footer()
             }
 
             jQuery('#buttonSubmit').click(function () {
+                jQuery('#buttonSubmit').attr('disabled', true);
+                jQuery('#buttonSubmit').val('Загрузка..');
+
                 var passFrontPage = jQuery('#passFrontPage')[0].files[0];
                 var form_data = new FormData();
                 form_data.append("passFrontPage", passFrontPage);
@@ -159,13 +162,15 @@ function castom_reg_form_my_custom_js_footer()
                     contentType: false,
                     processData: false,
                     success: function (response) {
+                        jQuery('#buttonSubmit').removeAttr("disabled");
+                        jQuery('#buttonSubmit').val('Отправить');
                         console.log('success');
                         if (response.error) {
                             console.log('2 error');
                             jQuery('#modal-text').html('');
                             jQuery('#myModal').css('display', 'block');
                             if (response.error.fiouser) {
-                                jQuery('#modal-text').append('<p>' + response.error.name + '<p>');
+                                jQuery('#modal-text').append('<p>' + response.error.fiouser + '<p>');
                             }
                             if (response.error.email) {
                                 jQuery('#modal-text').append('<p>' + response.error.email + '<p>');
