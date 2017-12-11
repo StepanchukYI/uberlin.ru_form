@@ -93,8 +93,8 @@ class TT_Example_List_Table extends WP_List_Table
 	{
 		//Build row actions
 		$actions = array(
-			'edit'   => sprintf( '<a href="?page=%s&action=%s&user=%s">Редактировать</a>', $_REQUEST['page'], 'edit', $item['id'] ),
-			'delete' => sprintf( '<a href="?page=%s&action=%s&user=%s">Удалить</a>', $_REQUEST['page'], 'delete', $item['id'] ),
+			'edit'   => sprintf( '<a href="?page=%s&action=%s&user=%s">Редактировать</a>', 'custom_reg_form', 'edit', $item['id'] ),
+			'delete' => sprintf( '<a href="?page=%s&action=%s&user=%s">Удалить</a>', 'custom_reg_form', 'delete', $item['id'] ),
 		);
 
 		//Return the title contents
@@ -427,47 +427,119 @@ function my_plugin_menu()
 function my_plugin_options()
 {
 
-	//Create an instance of our package class...
-	$testListTable = new TT_Example_List_Table();
-	//Fetch, prepare, sort, and filter our data...
-	$testListTable->prepare_items();
+	if ( $_GET['action'] == 'edit' )
+	{
+		$user = get_single_user_data( $_GET['user'] );
 
-	?>
-    <div class="wrap">
+		var_dump( $user );
 
-        <div id="icon-users" class="icon32"><br/></div>
-        <h2>Пользователи</h2>
+		?>
+        <div class="wrap">
 
-        <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
-        <form id="movies-filter" method="get">
-            <!-- For plugins, we also need to ensure that the form posts back to our current page -->
-            <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
-            <!-- Now we can render the completed list table -->
-			<?php $testListTable->display() ?>
-        </form>
-        <div>
-            <button id="userDataDownload">Выгрузить данные пользователей</button>
+            <div id="icon-users" class="icon32"><br/></div>
+            <h2>Пользователь</h2>
+
+            <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
+            <form id="movies-filter" method="get">
+
+
+            </form>
         </div>
-        <script>
-            var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
-            // var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
+		<?php
+	} elseif ( $_GET['action'] == 'dalete' )
+	{
+		$user = get_single_user_data( $_GET['user'] );
 
-            jQuery('#userDataDownload').click(function () {
-                jQuery.ajax({
-                    type: "post",
-                    url: new_reg_ajax_url,
-                    data: {action: "user_data_export_ajax"},
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        console.log("DONE");
-                    }
-            });
-            });
-        </script>
-    </div>
-	<?php
+		var_dump( $user );
+
+		?>
+        <div class="wrap">
+
+            <div id="icon-users" class="icon32"><br/></div>
+            <h2>Пользователь</h2>
+
+            <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
+            <form id="movies-filter" method="get">
+
+
+            </form>
+            <div>
+                <button id="userDataDownload">Выгрузить данные пользователей</button>
+            </div>
+            <script>
+                var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
+                // var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
+
+                jQuery('#userDataDownload').click(function () {
+                    jQuery.ajax({
+                        type: "post",
+                        url: new_reg_ajax_url,
+                        data: {action: "user_data_export_ajax"},
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            console.log("DONE");
+                        }
+                    });
+                });
+            </script>
+        </div>
+		<?php
+	} else
+	{
+		//Create an instance of our package class...
+		$testListTable = new TT_Example_List_Table();
+		//Fetch, prepare, sort, and filter our data...
+		$testListTable->prepare_items();
+
+		?>
+        <div class="wrap">
+
+            <div id="icon-users" class="icon32"><br/></div>
+            <h2>Пользователи</h2>
+
+            <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
+            <form id="movies-filter" method="get">
+                <!-- For plugins, we also need to ensure that the form posts back to our current page -->
+                <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
+                <!-- Now we can render the completed list table -->
+				<?php $testListTable->display() ?>
+            </form>
+            <div>
+                <button id="userDataDownload">Выгрузить данные пользователей</button>
+            </div>
+            <script>
+                var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
+                // var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
+
+                jQuery('#userDataDownload').click(function () {
+                    jQuery.ajax({
+                        type: "post",
+                        url: new_reg_ajax_url,
+                        data: {action: "user_data_export_ajax"},
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            console.log("DONE");
+                        }
+                    });
+                });
+            </script>
+        </div>
+		<?php
+	}
+
+}
+
+function get_single_user_data( $id )
+{
+	global $wpdb;
+	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
+	$users      = $wpdb->get_results( "SELECT * FROM {$table_name} WHERE id = $id", 'ARRAY_A' );
+
+	return $users;
 }
 
 function get_user_data()
