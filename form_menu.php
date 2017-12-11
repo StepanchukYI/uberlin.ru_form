@@ -429,64 +429,216 @@ function my_plugin_options()
 
 	if ( $_GET['action'] == 'edit' )
 	{
-		$user = get_single_user_data( $_GET['user'] );
+		$user = get_single_user_data( $_GET['user'] )[0];
 
-		var_dump( $user );
+		$local = [
+			'fiouser'       => 'ФИО',
+			'bdate'         => 'Дата рождения',
+			'bplace'        => 'Место рождения',
+			'email'         => 'Укажите вашу действующую почту',
+			'phonenumber'   => 'Номер телефона',
+			'city'          => 'Город',
+			'helpInfo'      => 'Откуда узнали',
+			'passport'      => 'Серия и номер паспорта',
+			'rovInfo'       => 'Код подразделения, который выдал паспорт',
+			'passDate'      => 'Дата выдачи паспорта',
+			'address'       => 'Адрес по прописке',
+			'passFrontPage' => 'Загрузить разворот паспорта',
+			'FIOPoluch'     => 'ФИО получателя средств',
+			'bik'           => 'БИК банка',
+			'korrBank'      => 'Корр. счет банка',
+			'bankName'      => 'Наименование банка',
+			'poluchCode'    => 'Счет получателя',
+			'bankCard'      => 'Номер карты',
+			'comment'       => 'Коментарий',
+			'personalData'  => 'Соглашение на обработку персональных данных ',
+		];
 
-		?>
+
+		$data = '
         <div class="wrap">
 
             <div id="icon-users" class="icon32"><br/></div>
             <h2>Пользователь</h2>
 
             <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
-            <form id="movies-filter" method="get">
+            <form id="movies-filter" method="POST">
+            
+                <input id="id" type="hidden"  value="' . $user['id'] . '"/> 
+                <div>                
+                    <label class="" for="fiouser">' . $local['fiouser'] . '</label>
+                    <input id="fiouser" type="text" required name="fiouser" placeholder="Укажите ФИО полностью" value="' . $user['fiouser'] . '"/>                    
+                </div>
 
+                <div>
+                    <label class="" for="bdate">' . $local['bdate'] . '</label>
+                    <input id="bdate" type="text" required name="bdate" placeholder="ДД.ММ.ГГГГ" value="' . $user['bdate'] . '"/>
+                </div>
 
+                <div>
+                    <label class="" for="bplace">' . $local['bplace'] . '</label>
+                    <input id="bplace" type="text" name="bplace" placeholder="Как в паспорте" value="' . $user['bplace'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="phonenumber">' . $local['phonenumber'] . '</label>
+                    <input id="phonenumber" type="text" required name="phone" placeholder="7(999) 999-9999" value="' . $user['phonenumber'] . '" />
+                </div>
+
+                <div>
+                    <label class="" for="email">' . $local['email'] . '</label>
+                    <input id="email" type="text" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" placeholder="' . $local['email'] . '" value="' . $user['email'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="city">' . $local['city'] . '</label>
+                    <select class="select" name="city" id="city">
+                        <option value="' . $user['city'] . '">' . $user['city'] . '</option>
+                        <option value="">' . $local['city'] . '</option>
+                        <option value="Воронеж">Воронеж</option>
+                        <option value="Екатеринбург">Екатеринбург</option>
+                        <option value="Казань">Казань</option>
+                        <option value="Краснодар">Краснодар</option>
+                        <option value="Красноярск">Красноярск</option>
+                        <option value="Москва">Москва</option>
+                        <option value="Нижний Новгород">Нижний Новгород</option>
+                        <option value="Новосибирск">Новосибирск</option>
+                        <option value="Омск">Омск</option>
+                        <option value="Пермь">Пермь</option>
+                        <option value="Ростов">Ростов</option>
+                        <option value="Самара">Самара</option>
+                        <option value="Санкт Петербург">Санкт Петербург</option>
+                        <option value="Сочи">Сочи</option>
+                        <option value="Уфа">Уфа</option>
+                        <option value="Челябинск">Челябинск</option>
+                        <option value="Тольятти">Тольятти</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="" for="helpInfo">' . $local['helpInfo'] . '</label>
+                    <select class="select" name="helpInfo" id="helpInfo">
+                        <option value="' . $user['helpInfo'] . '">' . $user['helpInfo'] . '</option>
+                        <option value="">' . $local['helpInfo'] . '</option>
+                        <option value="Авито">Авито</option>
+                        <option value="Яндекс">Яндекс</option>
+                        <option value="Гугл">Гугл</option>
+                        <option value="Сайт вакансий">Сайт вакансий</option>
+                        <option value="Рекомендация друзей/знакомых">Рекомендация друзей/знакомых</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="" for="passport">' . $local['passport'] . '</label>
+                    <input id="passport" type="text" name="passport" placeholder="12 34 567890" value="' . $user['passport'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="rovInfo">' . $local['rovInfo'] . '</label>
+                    <input id="rovInfo" type="text" name="rovInfo" placeholder="123-456" value="' . $user['rovInfo'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="passDate">' . $local['passDate'] . '</label>
+                    <input id="passDate" type="text" name="passDate" placeholder="ДД.ММ.ГГГГ" value="' . $user['passDate'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="address">' . $local['address'] . '</label>
+                    <input id="address" type="text" name="address" placeholder="Полный адрес прописки, как в паспорте" value="' . $user['address'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="FIOPoluch">' . $local['FIOPoluch'] . '</label>
+                    <input id="FIOPoluch" type="text" name="FIOPoluch" placeholder="ФИО получателя полностью" value="' . $user['FIOPoluch'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="bankName">' . $local['bankName'] . '</label>
+                    <input id="bankName" type="text" name="bankName" placeholder="' . $local['bankName'] . '" value="' . $user['bankName'] . '" maxlength="18"/>
+                </div>
+
+                <div>
+                    <label class="" for="bankName">Номер счета</label>
+                    <input id="poluchCode" type="text" name="poluchCode" maxlength="20" placeholder="Начинается с 40817810" value="' . $user['poluchCode'] . '"/>
+                </div>
+
+                <div>
+                    <label class="" for="bik">' . $local['bik'] . '</label>
+                    <input id="bik" type="text" name="bik" maxlength="9" placeholder="Начинаются с 04" value="' . $user['bik'] . '"/>
+                </div>
+                
+                <div>
+                    <label class="" for="korrBank">' . $local['korrBank'] . '</label>
+                    <input id="korrBank" type="text" name="korrBank" maxlength="20" placeholder="Начинается с 301" value="' . $user['korrBank'] . '"/>
+                </div>
+
+                <div>
+                    <label for="bankCard">' . $local['bankCard'] . '<strong style="color: red">*</strong></label>
+                    <input id="bankCard" type="text" name="bankCard" maxlength="18" placeholder="' . $local['bankCard'] . '" value="' . $user['bankCard'] . '"/>
+                </div>
+                
+                <div>
+                    <label for="comment">' . $local['comment'] . '</label>
+                    <textarea id="comment" rows="4" name="comment" placeholder="' . $local['comment'] . '">' . $user['comment'] . '</textarea>
+                </div>
+                
+                <input class="acf-button button button-primary button-large" type="button" name="buttonSubmit" id="buttonSubmit" value="Отправить"/>
             </form>
         </div>
-		<?php
+		';
+		$data .= "<script>
+
+        // var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
+        var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
+        
+        jQuery(document).ready(function () {
+            jQuery('#buttonSubmit').click(function () {               
+                var form_data = new FormData();
+                form_data.append('action', 'custom_registration_update_ajax');
+                form_data.append('fiouser', jQuery('#fiouser').val());
+                form_data.append('email', jQuery('#email').val());
+                form_data.append('phonenumber', jQuery('#phonenumber').val());
+                form_data.append('city', jQuery('#city').val());
+                form_data.append('bankCard', jQuery('#bankCard').val());
+                form_data.append('bdate', jQuery('#bdate').val());
+                form_data.append('bplace', jQuery('#bplace').val());
+                form_data.append('helpInfo', jQuery('#helpInfo').val());
+                form_data.append('passport', jQuery('#passport').val());
+                form_data.append('rovInfo', jQuery('#rovInfo').val());
+                form_data.append('passDate', jQuery('#passDate').val());
+                form_data.append('address', jQuery('#address').val());
+                form_data.append('bik', jQuery('#bik').val());
+                form_data.append('korrBank', jQuery('#korrBank').val());
+                form_data.append('bankName', jQuery('#bankName').val());
+                form_data.append('poluchCode', jQuery('#poluchCode').val());
+                form_data.append('comment', jQuery('#comment').val());
+                form_data.append('id', jQuery('#id').val());
+                jQuery.ajax({
+                    type: 'post',
+                    url: new_reg_ajax_url,
+                    data: form_data,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {                        
+                        console.log('success');
+                        alert('Сохранено!');
+                        window.location.href = 'admin.php?page=custom_reg_form';
+                        
+                    }
+                });
+                        });
+            });
+</script>";
+		echo $data;
+
 	} elseif ( $_GET['action'] == 'dalete' )
 	{
-		$user = get_single_user_data( $_GET['user'] );
-
-		var_dump( $user );
-
-		?>
-        <div class="wrap">
-
-            <div id="icon-users" class="icon32"><br/></div>
-            <h2>Пользователь</h2>
-
-            <!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
-            <form id="movies-filter" method="get">
-
-
-            </form>
-            <div>
-                <button id="userDataDownload">Выгрузить данные пользователей</button>
-            </div>
-            <script>
-                var new_reg_ajax_url = 'http://uberlin.ru/wp-admin/admin-ajax.php';
-                // var new_reg_ajax_url = 'http://37.57.92.40/wp-3/wp-admin/admin-ajax.php';
-
-                jQuery('#userDataDownload').click(function () {
-                    jQuery.ajax({
-                        type: "post",
-                        url: new_reg_ajax_url,
-                        data: {action: "user_data_export_ajax"},
-                        dataType: 'json',
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            console.log("DONE");
-                        }
-                    });
-                });
-            </script>
-        </div>
-		<?php
-	} else
+		delete_user_data($_GET['user']);
+		header ('admin.php?page=custom_reg_form');
+	}
+    else
 	{
 		//Create an instance of our package class...
 		$testListTable = new TT_Example_List_Table();
@@ -533,6 +685,69 @@ function my_plugin_options()
 
 }
 
+add_action( 'wp_ajax_custom_registration_update_ajax', 'custom_registration_update_ajax' );
+add_action( 'wp_ajax_nopriv_custom_registration_update_ajax', 'custom_registration_update_ajax' );
+function custom_registration_update_ajax()
+{
+
+	$id          = $_REQUEST['id'];
+	$fiouser     = $_REQUEST['fiouser'];
+	$bdate       = $_REQUEST['bdate'];
+	$bplace      = $_REQUEST['bplace'];
+	$phonenumber = $_REQUEST['phonenumber'];
+	$email       = $_REQUEST['email'];
+	$city        = $_REQUEST['city'];
+	$helpInfo    = $_REQUEST['helpInfo'];
+	$passport    = $_REQUEST['passport'];
+	$rovInfo     = $_REQUEST['rovInfo'];
+	$passDate    = $_REQUEST['passDate'];
+	$address     = $_REQUEST['address'];
+	$bik         = $_REQUEST['bik'];
+	$korrBank    = $_REQUEST['korrBank'];
+	$bankName    = $_REQUEST['bankName'];
+	$poluchCode  = $_REQUEST['poluchCode'];
+	$bankCard    = $_REQUEST['bankCard'];
+	$comment     = $_REQUEST['comment'];
+
+	$response = edit_registration( $fiouser, $bdate, $bplace, $email, $phonenumber,
+		$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
+		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id );
+
+
+	echo json_encode( $response );
+	die();
+}
+
+function edit_registration(
+	$fiouser, $bdate, $bplace, $email, $phonenumber,
+	$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
+	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id
+) {
+
+	global $wpdb;
+	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
+
+	return $wpdb->update( $table_name, array(
+		'fiouser'     => $fiouser,
+		'bdate'       => $bdate,
+		'bplace'      => $bplace,
+		'email'       => $email,
+		'phonenumber' => $phonenumber,
+		'city'        => $city,
+		'helpInfo'    => $helpInfo,
+		'passport'    => $passport,
+		'passDate'    => $passDate,
+		'rovInfo'     => $rovInfo,
+		'address'     => $address,
+		'bik'         => $bik,
+		'korrBank'    => $korrBank,
+		'bankName'    => $bankName,
+		'poluchCode'  => $poluchCode,
+		'bankCard'    => $bankCard,
+		'comment'     => $comment
+	), array( 'id' => $id ) );
+}
+
 function get_single_user_data( $id )
 {
 	global $wpdb;
@@ -542,11 +757,19 @@ function get_single_user_data( $id )
 	return $users;
 }
 
+function delete_user_data($id){
+	global $wpdb;
+	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
+	$users      = $wpdb->delete( $table_name, $id );
+
+	return $users;
+}
+
 function get_user_data()
 {
 	global $wpdb;
 	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
-	$users      = $wpdb->get_results( "SELECT id,fiouser,email,phonenumber,city,passport FROM {$table_name}", 'ARRAY_A' );
+	$users      = $wpdb->get_results( "SELECT id,fiouser,email,phonenumber,city,passport FROM {$table_name} ORDER BY id DESC ", 'ARRAY_A' );
 
 	return $users;
 }
