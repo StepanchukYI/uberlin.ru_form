@@ -38,19 +38,20 @@ function custom_registration_submit_ajax()
 	$poluchCode            = $_REQUEST['poluchCode'];
 	$bankCard              = $_REQUEST['bankCard'];
 	$comment               = $_REQUEST['comment'];
+	$FIOPoluch             = $_REQUEST['FIOPoluch'];
 	$personalData          = $_REQUEST['personalData'];
 	$personalData1         = $_REQUEST['personalData1'];
 	$personalData2         = $_REQUEST['personalData2'];
 
 	$reg_error = registration_validation( $fiouser, $bdate, $bplace, $email, $phonenumber,
-		$city, $passport, $passDate, $rovInfo, $address,
+		$city, $passport, $passDate, $rovInfo, $address, $FIOPoluch,
 		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $personalData1, $personalData2, $personalData );
 
 	if ( count( $reg_error ) == 0 )
 	{
 		$response = complete_registration( $fiouser, $bdate, $bplace, $email, $phonenumber,
 			$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-			$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment );
+			$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment, $FIOPoluch );
 
 
 		if ( $response['success'] )
@@ -144,6 +145,7 @@ function castom_reg_form_my_custom_js_footer()
                 form_data.append("helpInfo", jQuery('#helpInfo').val());
                 form_data.append("passport", jQuery('#passport').val());
                 form_data.append("rovInfo", jQuery('#rovInfo').val());
+                form_data.append("FIOPoluch", jQuery('#FIOPoluch').val());
                 form_data.append("passDate", jQuery('#passDate').val());
                 form_data.append("address", jQuery('#address').val());
                 form_data.append("bik", jQuery('#bik').val());
@@ -671,7 +673,7 @@ function check_card_number( $str )
 
 function registration_validation(
 	$fiouser, $bdate, $bplace, $email, $phonenumber,
-	$city, $passport, $passDate, $rovInfo, $address,
+	$city, $passport, $passDate, $rovInfo, $address, $FIOPoluch,
 	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $personalData1, $personalData2, $personalData
 ) {
 
@@ -778,7 +780,7 @@ function generateRandomString()
 function complete_registration(
 	$fiouser, $bdate, $bplace, $email, $phonenumber,
 	$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment
+	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment, $FIOPoluch
 ) {
 	setlocale( LC_TIME, "ru_RU.UTF-8" );
 //    $date = strftime("%d %B, %H:%M",strtotime($row['date']));
@@ -786,9 +788,9 @@ function complete_registration(
 	$lastid = insert_user_data(
 		$fiouser, $bdate, $bplace, $email, $phonenumber,
 		$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment
+		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment, $FIOPoluch
 	);
-	$html = '<style>
+	$html   = '<style>
 body {font-family: sans-serif;
     font-size: 10pt;
 }
@@ -809,7 +811,7 @@ td.lastrow {
 	border-right: 0.6mm solid #000000;
 }
 h5{	text-transform: uppercase;}
-</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ '. $lastid .' от «' . date( 'Y.m.d' ) . '» г. </h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
+</style>	<div style="text-align:center"><h5 >ДОГОВОР ПРИСОЕДИНЕНИЯ К ПУБЛИЧНОМУ АГЕНТСКОМУ ДОГОВОРУ</h5>	<h6>№ ' . $lastid . ' от «' . date( 'Y.m.d' ) . '» г. </h6></div>		<table>		<tr><td>Настоящая анкета является частными условиями публичного агентского договора индивидуального предпринимателя Макухина Арсения Александровича.<td></tr>		<tr><td>Общие условия публичного агентского договора ИП Макухина Арсения Александровича размещены на сайте  (далее – <a href="www.uberlin.ru/dogovor">www.uberlin.ru/dogovor</a> «Оферта»).</td></tr>
 </table>
 <div style="text-align: center;"><h5>Реквизиты Принципала:</h5></div>
     <table border="0" align="center">
@@ -882,7 +884,7 @@ h5{	text-transform: uppercase;}
 			</td>
 		</tr>
 	</table>
-	<div>Индивидуальный код: ('. $lastid .') _______________________ / ' . $fiouser . '/</div>
+	<div>Индивидуальный код: (' . $lastid . ') _______________________ / ' . $fiouser . '/</div>
 	<table>
 		<tr>
 			<td>Индивидуальный предприниматель <br>
@@ -903,7 +905,6 @@ h5{	text-transform: uppercase;}
 	$mpdf->charset_in = 'windows-1252';
 
 	$mpdf->Output( $path );
-
 
 
 	$subj = 'Договор';
@@ -957,7 +958,7 @@ function custom_registration_shortcode()
 function insert_user_data(
 	$fiouser, $bdate, $bplace, $email, $phonenumber,
 	$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment
+	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $file, $comment, $FIOPoluch
 ) {
 
 	global $wpdb;
@@ -976,6 +977,7 @@ function insert_user_data(
 		'passDate'    => $passDate,
 		'rovInfo'     => $rovInfo,
 		'address'     => $address,
+		'FIOPoluch'   => $FIOPoluch,
 		'bik'         => $bik,
 		'korrBank'    => $korrBank,
 		'bankName'    => $bankName,

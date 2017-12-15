@@ -403,7 +403,7 @@ function testplugin_install()
   bankCard    TEXT NULL,
   helpInfo    TEXT NULL,
   comment  TEXT NULL,
-  UNIQUE KEY id (id)
+  UNIQUE KEY id (id);
  );";
 
 
@@ -606,6 +606,7 @@ function my_plugin_options()
                 form_data.append('helpInfo', jQuery('#helpInfo').val());
                 form_data.append('passport', jQuery('#passport').val());
                 form_data.append('rovInfo', jQuery('#rovInfo').val());
+                form_data.append('FIOPoluch', jQuery('#FIOPoluch').val());
                 form_data.append('passDate', jQuery('#passDate').val());
                 form_data.append('address', jQuery('#address').val());
                 form_data.append('bik', jQuery('#bik').val());
@@ -635,10 +636,9 @@ function my_plugin_options()
 
 	} elseif ( $_GET['action'] == 'dalete' )
 	{
-		delete_user_data($_GET['user']);
-		header ('admin.php?page=custom_reg_form');
-	}
-    else
+		delete_user_data( $_GET['user'] );
+		header( 'admin.php?page=custom_reg_form' );
+	} else
 	{
 		//Create an instance of our package class...
 		$testListTable = new TT_Example_List_Table();
@@ -702,6 +702,7 @@ function custom_registration_update_ajax()
 	$rovInfo     = $_REQUEST['rovInfo'];
 	$passDate    = $_REQUEST['passDate'];
 	$address     = $_REQUEST['address'];
+	$FIOPoluch     = $_REQUEST['FIOPoluch'];
 	$bik         = $_REQUEST['bik'];
 	$korrBank    = $_REQUEST['korrBank'];
 	$bankName    = $_REQUEST['bankName'];
@@ -711,7 +712,7 @@ function custom_registration_update_ajax()
 
 	$response = edit_registration( $fiouser, $bdate, $bplace, $email, $phonenumber,
 		$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id );
+		$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id, $FIOPoluch );
 
 
 	echo json_encode( $response );
@@ -721,7 +722,7 @@ function custom_registration_update_ajax()
 function edit_registration(
 	$fiouser, $bdate, $bplace, $email, $phonenumber,
 	$city, $helpInfo, $passport, $passDate, $rovInfo, $address,
-	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id
+	$bik, $korrBank, $bankName, $poluchCode, $bankCard, $comment, $id, $FIOPoluch
 ) {
 
 	global $wpdb;
@@ -739,6 +740,7 @@ function edit_registration(
 		'passDate'    => $passDate,
 		'rovInfo'     => $rovInfo,
 		'address'     => $address,
+		'$FIOPoluch'  => $FIOPoluch,
 		'bik'         => $bik,
 		'korrBank'    => $korrBank,
 		'bankName'    => $bankName,
@@ -757,7 +759,8 @@ function get_single_user_data( $id )
 	return $users;
 }
 
-function delete_user_data($id){
+function delete_user_data( $id )
+{
 	global $wpdb;
 	$table_name = $wpdb->get_blog_prefix() . 'custom_registration_form_uberlin';
 	$users      = $wpdb->delete( $table_name, $id );
