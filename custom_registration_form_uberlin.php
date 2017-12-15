@@ -189,6 +189,9 @@ function castom_reg_form_my_custom_js_footer()
                             if (response.error.bdate) {
                                 jQuery('#modal-text').append('<p>' + response.error.bdate + '<p>');
                             }
+                            if (response.error.FIOPoluch) {
+                                jQuery('#modal-text').append('<p>' + response.error.FIOPoluch + '<p>');
+                            }
                             if (response.error.bplace) {
                                 jQuery('#modal-text').append('<p>' + response.error.bplace + '<p>');
                             }
@@ -689,6 +692,10 @@ function registration_validation(
 	if ( strlen( $bplace ) < 2 || strlen( $bplace ) > 100 )
 	{
 		$reg_errors['bplace'] = 'Ошибка ввода места рождения';
+	}
+    if ( strlen( $FIOPoluch ) < 2 || strlen( $FIOPoluch ) > 100 )
+	{
+		$reg_errors['FIOPoluch'] = 'Ошибка имени получателя';
 	}
 	if ( strlen( $email ) < 2 || strlen( $email ) > 100 || ! is_email( $email ) )
 	{
